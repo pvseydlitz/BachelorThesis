@@ -4,7 +4,9 @@ import matplotlib.pyplot as plt
 hk_cities = pd.read_csv('./Data/HK_cities.csv')
 
 df = pd.DataFrame(hk_cities)
-#print(df.info())
+
+df_filtered_energiequsweistyp = df[df['energieeffizienzklasse'] != 'Not specified']
+print(df_filtered_energiequsweistyp['energieeffizienzklasse'].head())
 
 df['adat_year'] = df['adat'].astype(str).str[:4]
 #count_by_year = df.groupby('adat_year').size()
@@ -27,7 +29,7 @@ merged_df = pd.merge(df, df_plz_city, on="plz")
 big_cities = ['Hamburg', 'Hannover', 'Bremen', 'Düsseldorf', 'Essen', 'Duisburg', 'Köln', 'Dortmund', 'Frankfurt', 'Stuttgart', 'München', 'Nürnberg', 'Berlin', 'Dresden', 'Leizig']
 filtered_df = merged_df[merged_df['ort'].isin(big_cities)]
 
-count_by_ort = filtered_df.groupby('ort')['price_sqm'].mean()
+count_by_ort = filtered_df.groupby('ort')['price_sqm'].count()
 print(count_by_ort)
 
 plt.bar(count_by_ort.index, count_by_ort.values)

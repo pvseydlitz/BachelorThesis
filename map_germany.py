@@ -104,7 +104,7 @@ hk_cities_df.groupby('plz')['price_sqm'].mean()
 germany_price_sqm_df = pd.merge(left=germany_df, right=hk_cities_df, on='plz', how='left')
 print(germany_price_sqm_df.head())
 
-""" fig, ax = plt.subplots()
+fig, ax = plt.subplots()
 
 germany_price_sqm_df.plot(ax=ax, column='price_sqm', categorical=False, legend=True, cmap='autumn_r', alpha=0.8)
 
@@ -130,7 +130,7 @@ ax.set(
     aspect=1.3,
     facecolor='lightblue'
 )
-plt.show() """
+plt.show()
 
 #Price per sqm per PLZ in Hamburg
 berlin_df = germany_price_sqm_df.query('ort == "Hamburg"')
