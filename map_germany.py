@@ -8,7 +8,7 @@ plt.style.use('seaborn')
 
 plz_shape_df = gpd.read_file('Data/PLZ-Gebiete/plz-gebiete.shp', dtype={'plz': str})
 
-print(plz_shape_df.head())
+#print(plz_shape_df.head())
 
 #Simple map of Germany
 plt.rcParams['figure.figsize'] = [16, 11]
@@ -67,12 +67,12 @@ germany_df.drop(['note'], axis=1, inplace=True)
 
 #Number of inhabitants per plz
 plz_einwohner_df = pd.read_csv('./Data/plz_einwohner.csv', sep=',', dtype={'plz': str, 'einwohner': int})
-germany_df = pd.merge(left=germany_df, right=plz_einwohner_df, on='plz', how='left')
-print(germany_df.head())
+germany_plz_einwohner_df = pd.merge(left=germany_df, right=plz_einwohner_df, on='plz', how='left')
+#print(germany_df.head())
 
 fig, ax = plt.subplots()
 
-germany_df.plot(ax=ax, column='einwohner', categorical=False, legend=True, cmap='autumn_r', alpha=0.8)
+germany_plz_einwohner_df.plot(ax=ax, column='einwohner', categorical=False, legend=True, cmap='autumn_r', alpha=0.8)
 
 for c in top_cities.keys():
     ax.text(
@@ -96,4 +96,48 @@ ax.set(
     aspect=1.3,
     facecolor='lightblue'
 )
+plt.show()
+
+#Price per sqm per PLZ
+hk_cities_df = pd.read_csv('./Data/HK_cities.csv', sep=',', dtype={'plz': str})
+hk_cities_df.groupby('plz')['price_sqm'].mean()
+germany_price_sqm_df = pd.merge(left=germany_df, right=hk_cities_df, on='plz', how='left')
+print(germany_price_sqm_df.head())
+
+""" fig, ax = plt.subplots()
+
+germany_price_sqm_df.plot(ax=ax, column='price_sqm', categorical=False, legend=True, cmap='autumn_r', alpha=0.8)
+
+for c in top_cities.keys():
+    ax.text(
+        x=top_cities[c][0],
+        y=top_cities[c][1] + 0.08,
+        s=c,
+        fontsize=12,
+        ha='center',
+    )
+
+    ax.plot(
+        top_cities[c][0],
+        top_cities[c][1],
+        marker='o',
+        c='black',
+        alpha=0.5
+    )
+
+ax.set(
+    title='Germany: Mean price per sqm per Postal Code',
+    aspect=1.3,
+    facecolor='lightblue'
+)
+plt.show() """
+
+#Price per sqm per PLZ in Hamburg
+berlin_df = germany_price_sqm_df.query('ort == "Hamburg"')
+
+fig, ax = plt.subplots()
+
+berlin_df.plot(ax=ax, column='price_sqm', categorical=False, legend=True, cmap='autumn_r',)
+
+ax.set(title='Hamburg: mean price per sqm per Postal Code', aspect=1.3, facecolor='lightblue')
 plt.show()
