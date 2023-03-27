@@ -101,7 +101,7 @@ plt.show()
 
 #Price per sqm per PLZ
 hk_cities_df = pd.read_csv('./Data/HK_cities.csv', sep=',', dtype={'plz': str})
-hk_cities_df.groupby('plz')['price_sqm'].mean()
+hk_cities_df.groupby('plz')['price_sqm'].count()
 germany_price_sqm_df = pd.merge(left=germany_df, right=hk_cities_df, on='plz', how='left')
 print(germany_price_sqm_df.head())
 
